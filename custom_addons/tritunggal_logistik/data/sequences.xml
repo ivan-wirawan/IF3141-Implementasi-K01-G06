@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="seq_tritunggal_pesanan" model="ir.sequence">
+        <field name="name">Tritunggal Pesanan</field>
+        <field name="code">tritunggal.pesanan</field>
+        <field name="prefix">PSN-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_tritunggal_item_pesanan" model="ir.sequence">
+        <field name="name">Tritunggal Item Pesanan</field>
+        <field name="code">tritunggal.item_pesanan</field>
+        <field name="prefix">ITM-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_tritunggal_pengiriman" model="ir.sequence">
+        <field name="name">Tritunggal Pengiriman</field>
+        <field name="code">tritunggal.pengiriman</field>
+        <field name="prefix">PGN-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_tritunggal_armada" model="ir.sequence">
+        <field name="name">Tritunggal Armada</field>
+        <field name="code">tritunggal.armada</field>
+        <field name="prefix">ARM-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_tritunggal_invoice" model="ir.sequence">
+        <field name="name">Tritunggal Invoice</field>
+        <field name="code">tritunggal.invoice</field>
+        <field name="prefix">INV-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="seq_tritunggal_laporan_kerusakan" model="ir.sequence">
+        <field name="name">Tritunggal Laporan Kerusakan</field>
+        <field name="code">tritunggal.laporan_kerusakan</field>
+        <field name="prefix">LPR-</field>
+        <field name="padding">5</field>
+    </record>
+</odoo>

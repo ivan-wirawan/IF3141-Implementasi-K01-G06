@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="armada_1" model="tritunggal.armada">
+        <field name="id_armada">ARM-001</field>
+        <field name="plat_nomor">B 1234 TGN</field>
+        <field name="kapasitas">12.5</field>
+        <field name="status_armada">tersedia</field>
+        <field name="tgl_servis_terakhir">2026-03-15</field>
+    </record>
+    <record id="armada_2" model="tritunggal.armada">
+        <field name="id_armada">ARM-002</field>
+        <field name="plat_nomor">B 5678 TGN</field>
+        <field name="kapasitas">8.0</field>
+        <field name="status_armada">perbaikan</field>
+        <field name="tgl_servis_terakhir">2026-02-20</field>
+    </record>
+    <record id="item_1" model="tritunggal.item_pesanan">
+        <field name="id_item">ITM-001</field>
+        <field name="pesanan_id" ref="pesanan_1"/>
+        <field name="jumlah_barang">10</field>
+        <field name="volume_barang">2.5</field>
+        <field name="berat_barang">120.0</field>
+        <field name="subtotal_harga">2500000</field>
+    </record>
+    <record id="item_2" model="tritunggal.item_pesanan">
+        <field name="id_item">ITM-002</field>
+        <field name="pesanan_id" ref="pesanan_1"/>
+        <field name="jumlah_barang">5</field>
+        <field name="volume_barang">1.2</field>
+        <field name="berat_barang">60.0</field>
+        <field name="subtotal_harga">1500000</field>
+    </record>
+    <record id="item_3" model="tritunggal.item_pesanan">
+        <field name="id_item">ITM-003</field>
+        <field name="pesanan_id" ref="pesanan_2"/>
+        <field name="jumlah_barang">8</field>
+        <field name="volume_barang">2.0</field>
+        <field name="berat_barang">80.0</field>
+        <field name="subtotal_harga">2000000</field>
+    </record>
+
+</odoo>

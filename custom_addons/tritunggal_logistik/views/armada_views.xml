@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_tritunggal_armada_tree" model="ir.ui.view">
+        <field name="name">tritunggal.armada.tree</field>
+        <field name="model">tritunggal.armada</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="id_armada"/>
+                <field name="plat_nomor"/>
+                <field name="nama_supir"/>
+                <field name="kapasitas"/>
+                <field name="status_armada"/>
+                <field name="tgl_servis_terakhir"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tritunggal_armada_form" model="ir.ui.view">
+        <field name="name">tritunggal.armada.form</field>
+        <field name="model">tritunggal.armada</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="id_armada"/>
+                            <field name="plat_nomor"/>
+                            <field name="nama_supir"/>
+                        </group>
+                        <group>
+                            <field name="kapasitas"/>
+                            <field name="status_armada"/>
+                            <field name="tgl_servis_terakhir"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tritunggal_armada" model="ir.actions.act_window">
+        <field name="name">Armada</field>
+        <field name="res_model">tritunggal.armada</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_report_tritunggal_invoice" model="ir.actions.report">
+        <field name="name">Tritunggal Invoice</field>
+        <field name="model">tritunggal.invoice</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">tritunggal_logistik.report_invoice_document</field>
+        <field name="report_file">tritunggal_logistik.report_invoice_document</field>
+        <field name="print_report_name">'Invoice - %s' % (object.id_invoice)</field>
+    </record>
+
+    <template id="report_invoice_document">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.external_layout">
+                <main>
+                    <div class="page">
+                        <h2>Invoice</h2>
+                        <div class="row mt16 mb16">
+                            <div class="col-6">
+                                <strong>ID Invoice:</strong>
+                                <span t-esc="o.id_invoice"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Tanggal Terbit:</strong>
+                                <span t-esc="o.tgl_terbit"/>
+                            </div>
+                        </div>
+                        <div class="row mb16">
+                            <div class="col-6">
+                                <strong>Jatuh Tempo:</strong>
+                                <span t-esc="o.tgl_jatuh_tempo"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Status Pembayaran:</strong>
+                                <span t-esc="o.status_pembayaran"/>
+                            </div>
+                        </div>
+                        <div class="mt16">
+                            <h4>Detail Pesanan</h4>
+                            <div>
+                                <strong>ID Pesanan:</strong>
+                                <span t-esc="o.pesanan_id.id_pesanan"/>
+                            </div>
+                            <div>
+                                <strong>Tanggal Pesanan:</strong>
+                                <span t-esc="o.pesanan_id.tgl_pesanan"/>
+                            </div>
+                            <div>
+                                <strong>Alamat Asal:</strong>
+                                <span t-esc="o.pesanan_id.alamat_asal"/>
+                            </div>
+                            <div>
+                                <strong>Alamat Tujuan:</strong>
+                                <span t-esc="o.pesanan_id.alamat_tujuan"/>
+                            </div>
+                            <div>
+                                <strong>Total Biaya:</strong>
+                                <span t-esc="o.pesanan_id.total_biaya"/>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_tritunggal_item_pesanan_tree" model="ir.ui.view">
+        <field name="name">tritunggal.item_pesanan.tree</field>
+        <field name="model">tritunggal.item_pesanan</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="id_item"/>
+                <field name="pesanan_id"/>
+                <field name="jumlah_barang"/>
+                <field name="volume_barang"/>
+                <field name="berat_barang"/>
+                <field name="subtotal_harga"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tritunggal_item_pesanan_form" model="ir.ui.view">
+        <field name="name">tritunggal.item_pesanan.form</field>
+        <field name="model">tritunggal.item_pesanan</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="id_item"/>
+                            <field name="pesanan_id"/>
+                        </group>
+                        <group>
+                            <field name="jumlah_barang"/>
+                            <field name="volume_barang"/>
+                            <field name="berat_barang"/>
+                            <field name="subtotal_harga"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tritunggal_item_pesanan" model="ir.actions.act_window">
+        <field name="name">Item Pesanan</field>
+        <field name="res_model">tritunggal.item_pesanan</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

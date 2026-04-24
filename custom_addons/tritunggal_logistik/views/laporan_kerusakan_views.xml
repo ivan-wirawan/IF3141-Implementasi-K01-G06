@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_tritunggal_laporan_kerusakan_tree" model="ir.ui.view">
+        <field name="name">tritunggal.laporan_kerusakan.tree</field>
+        <field name="model">tritunggal.laporan_kerusakan</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="id_laporan"/>
+                <field name="armada_id"/>
+                <field name="pelapor_id"/>
+                <field name="tgl_laporan"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tritunggal_laporan_kerusakan_form" model="ir.ui.view">
+        <field name="name">tritunggal.laporan_kerusakan.form</field>
+        <field name="model">tritunggal.laporan_kerusakan</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="id_laporan"/>
+                            <field name="armada_id"/>
+                            <field name="pelapor_id"/>
+                        </group>
+                        <group>
+                            <field name="tgl_laporan"/>
+                            <field name="deskripsi"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="bukti_foto" widget="image"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tritunggal_laporan_kerusakan" model="ir.actions.act_window">
+        <field name="name">Laporan Kerusakan</field>
+        <field name="res_model">tritunggal.laporan_kerusakan</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

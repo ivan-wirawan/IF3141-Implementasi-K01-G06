@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="user_tritunggal_marketing" model="res.users">
+        <field name="name">Marketing Tritunggal</field>
+        <field name="login">marketing</field>
+        <field name="password">marketing123</field>
+        <field name="email">marketing@tritunggal.local</field>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_user'), ref('tritunggal_logistik.group_tritunggal_marketing')])]"/>
+    </record>
+
+    <record id="user_tritunggal_operasional" model="res.users">
+        <field name="name">Operasional Tritunggal</field>
+        <field name="login">operasional</field>
+        <field name="password">operasional123</field>
+        <field name="email">operasional@tritunggal.local</field>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_user'), ref('tritunggal_logistik.group_tritunggal_operasional')])]"/>
+    </record>
+
+    <record id="user_tritunggal_supir" model="res.users">
+        <field name="name">Supir Tritunggal</field>
+        <field name="login">supir</field>
+        <field name="password">supir123</field>
+        <field name="email">supir@tritunggal.local</field>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_user'), ref('tritunggal_logistik.group_tritunggal_supir')])]"/>
+    </record>
+</odoo>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_tritunggal_pengiriman_tree" model="ir.ui.view">
+        <field name="name">tritunggal.pengiriman.tree</field>
+        <field name="model">tritunggal.pengiriman</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="id_pengiriman"/>
+                <field name="pesanan_id"/>
+                <field name="armada_id"/>
+                <field name="tgl_berangkat"/>
+                <field name="estimasi_tiba"/>
+                <field name="status_pengiriman"/>
+                <field name="lokasi_terkini"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tritunggal_pengiriman_form" model="ir.ui.view">
+        <field name="name">tritunggal.pengiriman.form</field>
+        <field name="model">tritunggal.pengiriman</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="status_pengiriman" widget="statusbar" statusbar_visible="draft,berangkat,dalam_perjalanan,tiba,terkendala"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="id_pengiriman"/>
+                            <field name="pesanan_id"/>
+                            <field name="armada_id"/>
+                        </group>
+                        <group>
+                            <field name="tgl_berangkat"/>
+                            <field name="status_pengiriman"/>
+                            <field name="lokasi_terkini"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="bukti_foto" widget="image"/>
+                        </group>
+                        <group>
+                            <field name="gps_lat" readonly="1"/>
+                            <field name="gps_lng" readonly="1"/>
+                            <field name="gps_timestamp" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tritunggal_pengiriman_kanban" model="ir.ui.view">
+        <field name="name">tritunggal.pengiriman.kanban</field>
+        <field name="model">tritunggal.pengiriman</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="id_pengiriman"/>
+                <field name="status_pengiriman"/>
+                <field name="lokasi_terkini"/>
+                <field name="tgl_berangkat"/>
+                <field name="armada_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="id_pengiriman"/></strong>
+                            <div><field name="status_pengiriman"/></div>
+                            <div><field name="lokasi_terkini"/></div>
+                            <div><field name="armada_id"/></div>
+                            <div><field name="tgl_berangkat"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_tritunggal_pengiriman" model="ir.actions.act_window">
+        <field name="name">Pengiriman</field>
+        <field name="res_model">tritunggal.pengiriman</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+    <record id="action_tritunggal_pengiriman_supir" model="ir.actions.act_window">
+        <field name="name">Pengiriman Harian</field>
+        <field name="res_model">tritunggal.pengiriman</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[('armada_id.nama_supir', '=', user.name)]</field>
+    </record>
+</odoo>
