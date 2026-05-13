@@ -54,19 +54,19 @@ class TritunggalPenugasanPengiriman(models.Model):
     supir_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Supir',
-        required=True,
+        required=False,
         ondelete='restrict',
     )
     employee_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Employee',
-        required=True,
+        required=False,
         ondelete='restrict',
     )
     armada_id = fields.Many2one(
         comodel_name='tritunggal.armada',
         string='Kendaraan',
-        required=True,
+        required=False,
         ondelete='restrict',
     )
 
@@ -84,12 +84,30 @@ class TritunggalPenugasanPengiriman(models.Model):
         ),
     ]
 
+    @api.constrains('supir_id', 'employee_id', 'armada_id', 'status_penugasan')
+    def _check_required_fields_for_non_draft(self):
+        """
+        Validasi bahwa supir, employee, dan armada wajib diisi ketika status bukan 'draft'
+        """
+        for record in self:
+            if record.status_penugasan != 'draft':
+                if not record.supir_id:
+                    raise ValidationError('Field Supir harus diisi ketika penugasan bukan draft.')
+                if not record.employee_id:
+                    raise ValidationError('Field Employee harus diisi ketika penugasan bukan draft.')
+                if not record.armada_id:
+                    raise ValidationError('Field Kendaraan harus diisi ketika penugasan bukan draft.')
+
     @api.constrains('supir_id', 'armada_id')
     def _check_driver_and_vehicle_availability(self):
         """
         Validasi bahwa supir dan armada tidak sedang bertugas atau perbaikan
         """
         for record in self:
+            # Skip check jika field kosong (untuk draft status)
+            if not record.supir_id or not record.armada_id:
+                return
+                
             # Cek armada
             if record.armada_id.status_armada != 'tersedia':
                 raise ValidationError(
@@ -116,6 +134,9 @@ class TritunggalPenugasanPengiriman(models.Model):
         Pastikan employee dalam satu penugasan tidak duplikat dengan supir
         """
         for record in self:
+            # Skip check jika field kosong (untuk draft status)
+            if not record.supir_id or not record.employee_id:
+                continue
             if record.supir_id == record.employee_id:
                 raise ValidationError(
                     'Field Supir dan Employee tidak boleh sama. '
