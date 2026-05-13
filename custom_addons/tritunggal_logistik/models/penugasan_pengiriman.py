@@ -189,4 +189,4 @@ class TritunggalPenugasanPengiriman(models.Model):
             if employee:
                 # Supir hanya lihat penugasan mereka
                 args = expression.AND([args, [('supir_id', '=', employee.id)]])
-        return super()._search(args, offset=offset, limit=limit, order=order, count=count, access_rights_uid=access_rights_uid)
+        return super()._search(args, offset, limit, order, count, access_rights_uid)
