@@ -189,4 +189,6 @@ class TritunggalPenugasanPengiriman(models.Model):
             if employee:
                 # Supir hanya lihat penugasan mereka
                 args = expression.AND([args, [('supir_id', '=', employee.id)]])
-        return super()._search(args, offset, limit, order, count, access_rights_uid)
+        # Call base _search without passing access_rights_uid positionally
+        # (some Odoo versions expect fewer positional params).
+        return super(TritunggalPenugasanPengiriman, self)._search(args, offset, limit, order, count)
