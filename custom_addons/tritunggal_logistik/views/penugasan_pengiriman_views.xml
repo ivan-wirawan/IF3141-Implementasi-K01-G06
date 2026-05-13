@@ -12,6 +12,7 @@
                 <field name="nama_employee"/>
                 <field name="armada_id"/>
                 <field name="status_penugasan"/>
+                <field name="status_output_mitra"/>
             </tree>
         </field>
     </record>
@@ -22,6 +23,10 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <button name="action_change_to_assigned" type="object" string="Tetapkan Penugasan" class="btn-success" invisible="status_penugasan != 'draft'"/>
+                    <button name="action_change_to_running" type="object" string="Mulai Perjalanan" class="btn-info" invisible="status_penugasan not in ('ditugaskan',)"/>
+                    <button name="action_change_to_done" type="object" string="Selesaikan" class="btn-primary" invisible="status_penugasan != 'berjalan'"/>
+                    <button name="action_cancel" type="object" string="Batalkan" class="btn-danger"/>
                     <field name="status_penugasan" widget="statusbar" statusbar_visible="draft,ditugaskan,berjalan,selesai,batal"/>
                 </header>
                 <sheet>
@@ -41,11 +46,13 @@
                         <group>
                             <field name="supir_id"/>
                             <field name="employee_id"/>
+                            <field name="mitra_outsourcing_id"/>
                         </group>
                         <group>
                             <field name="nama_supir" readonly="1"/>
                             <field name="nama_employee" readonly="1"/>
                             <field name="plat_nomor" readonly="1"/>
+                            <field name="status_output_mitra"/>
                         </group>
                     </group>
                     <group>

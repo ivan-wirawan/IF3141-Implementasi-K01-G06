@@ -1,12 +1,14 @@
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class TritunggalPesanan(models.Model):
     _name = 'tritunggal.pesanan'
     _description = 'Pesanan'
     _rec_name = 'id_pesanan'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     id_pesanan = fields.Char(string='ID Pesanan', required=True)
     tgl_pesanan = fields.Date(string='Tanggal Pesanan', default=fields.Date.context_today, required=True)
@@ -21,6 +23,7 @@ class TritunggalPesanan(models.Model):
         string='Status Pesanan',
         default='draft',
         required=True,
+        tracking=True,
     )
     total_biaya = fields.Float(string='Total Biaya', compute='_compute_total', store=True)
 
@@ -107,3 +110,38 @@ class TritunggalPesanan(models.Model):
         if vals.get('status_pesanan') == 'terverifikasi':
             self.filtered(lambda rec: not rec.invoice_id).generate_invoice()
         return result
+
+    def action_create_penugasan_draft(self):
+        """
+        Tombol untuk membuat draf Penugasan Pengiriman otomatis
+        saat pesanan dikonfirmasi
+        """
+        for record in self:
+            if record.status_pesanan != 'terverifikasi':
+                raise ValidationError(
+                    f'Pesanan {record.id_pesanan} belum diverifikasi. '
+                    f'Verifikasi pesanan terlebih dahulu sebelum membuat penugasan.'
+                )
+            
+            # Cek apakah penugasan sudah ada
+            existing = self.env['tritunggal.penugasan_pengiriman'].search([
+                ('pesanan_id', '=', record.id),
+                ('status_penugasan', '!=', 'batal'),
+            ])
+            
+            if existing:
+                raise ValidationError(
+                    f'Penugasan untuk pesanan ini sudah ada. '
+                    f'ID Penugasan: {existing.id_penugasan}'
+                )
+            
+            # Buat penugasan draft
+            self.env['tritunggal.penugasan_pengiriman'].create({
+                'pesanan_id': record.id,
+                'status_penugasan': 'draft',
+            })
+            
+            record.message_post(
+                body=f'Penugasan pengiriman draft telah dibuat otomatis',
+                message_type='notification',
+            )

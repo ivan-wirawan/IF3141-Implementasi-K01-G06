@@ -21,8 +21,9 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_verify" type="object" string="Verify" class="btn-primary" invisible="status_pesanan != 'draft'"/>
-                    <button name="action_complete" type="object" string="Complete" class="btn-primary" invisible="status_pesanan != 'terverifikasi'"/>
+                    <button name="action_verify" type="object" string="Verifikasi" class="btn-primary" invisible="status_pesanan != 'draft'"/>
+                    <button name="action_create_penugasan_draft" type="object" string="Buat Penugasan Pengiriman" class="btn-success" invisible="status_pesanan != 'terverifikasi'"/>
+                    <button name="action_complete" type="object" string="Selesaikan" class="btn-primary" invisible="status_pesanan != 'terverifikasi'"/>
                     <field name="status_pesanan" widget="statusbar" statusbar_visible="draft,terverifikasi,selesai"/>
                 </header>
                 <sheet>

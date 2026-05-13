@@ -6,6 +6,7 @@ class TritunggalArmada(models.Model):
     _name = 'tritunggal.armada'
     _description = 'Armada'
     _rec_name = 'id_armada'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     id_armada = fields.Char(string='ID Armada', required=True)
     plat_nomor = fields.Char(string='Plat Nomor', required=True)
@@ -19,9 +20,18 @@ class TritunggalArmada(models.Model):
         string='Status Armada',
         default='tersedia',
         required=True,
+        tracking=True,
     )
     tgl_servis_terakhir = fields.Date(string='Tanggal Servis Terakhir')
     nama_supir = fields.Char(string='Nama Supir')
+
+    _sql_constraints = [
+        (
+            'plat_nomor_unique',
+            'UNIQUE(plat_nomor)',
+            'Plat nomor harus unik. Setiap armada harus memiliki plat nomor yang berbeda.',
+        ),
+    ]
 
     def cek_ketersediaan(self):
         for record in self:
@@ -37,4 +47,11 @@ class TritunggalArmada(models.Model):
         for vals in vals_list:
             if not vals.get('id_armada'):
                 vals['id_armada'] = self.env['ir.sequence'].next_by_code('tritunggal.armada')
-        return super().create(vals_list)
+        records = super().create(vals_list)
+        # Log pembuatan armada
+        for record in records:
+            record.message_post(
+                body=f'Armada dibuat oleh {self.env.user.name}',
+                message_type='notification',
+            )
+        return records

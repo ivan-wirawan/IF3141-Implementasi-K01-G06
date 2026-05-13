@@ -20,4 +20,45 @@
         <field name="name">Tritunggal Supir</field>
         <field name="category_id" ref="module_category_tritunggal_logistik"/>
     </record>
+
+    <record id="group_tritunggal_keuangan" model="res.groups">
+        <field name="name">Tritunggal Keuangan/Kasir</field>
+        <field name="category_id" ref="module_category_tritunggal_logistik"/>
+    </record>
+
+    <!-- Domain Rules untuk Supir: hanya lihat penugasan mereka sendiri -->
+    <record id="ir_rule_penugasan_supir_own" model="ir.rule">
+        <field name="name">Penugasan Pengiriman - Supir melihat penugasan sendiri</field>
+        <field name="model_id" ref="model_tritunggal_penugasan_pengiriman"/>
+        <field name="groups" eval="[(4, ref('group_tritunggal_supir'))]"/>
+        <field name="domain_force">[('supir_id.user_id', '=', user.id)]</field>
+        <field name="perm_read">True</field>
+        <field name="perm_write">False</field>
+        <field name="perm_create">False</field>
+        <field name="perm_unlink">False</field>
+    </record>
+
+    <!-- Domain Rules untuk Marketing: tidak lihat biaya operasional -->
+    <record id="ir_rule_pesanan_marketing" model="ir.rule">
+        <field name="name">Pesanan - Marketing kelola pesanan mereka</field>
+        <field name="model_id" ref="model_tritunggal_pesanan"/>
+        <field name="groups" eval="[(4, ref('group_tritunggal_marketing'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read">True</field>
+        <field name="perm_write">True</field>
+        <field name="perm_create">True</field>
+        <field name="perm_unlink">False</field>
+    </record>
+
+    <!-- Domain Rules untuk Keuangan: hanya lihat pengiriman selesai -->
+    <record id="ir_rule_pengiriman_keuangan" model="ir.rule">
+        <field name="name">Pengiriman - Keuangan lihat yang sudah tiba/selesai</field>
+        <field name="model_id" ref="model_tritunggal_pengiriman"/>
+        <field name="groups" eval="[(4, ref('group_tritunggal_keuangan'))]"/>
+        <field name="domain_force">[('status_pengiriman', 'in', ['tiba'])]</field>
+        <field name="perm_read">True</field>
+        <field name="perm_write">False</field>
+        <field name="perm_create">False</field>
+        <field name="perm_unlink">False</field>
+    </record>
 </odoo>
