@@ -19,7 +19,28 @@
         <field name="name">tritunggal.riwayat_perawatan.form</field>
         <field name="model">tritunggal.riwayat_perawatan</field>
         <field name="arch" type="xml">
-            <form>
+            <form create="false">
+                <style>
+                    .o_form_title {
+                        display: none !important;
+                    }
+                    .o_form_navbar {
+                        display: none !important;
+                    }
+                    a[data-tooltip*="Back to"] {
+                        display: none !important;
+                    }
+                    span.min-w-0.text-truncate {
+                        display: none !important;
+                    }
+                </style>
+                <toolbar/>
+                <header>
+                    <div class="d-flex justify-content-between">
+                        <button string="Kembali" class="btn btn-secondary btn-lg" special="cancel"/>
+                        <div/>
+                    </div>
+                </header>
                 <sheet>
                     <group>
                         <group>

@@ -21,12 +21,31 @@
         <field name="name">tritunggal.penugasan_pengiriman.form</field>
         <field name="model">tritunggal.penugasan_pengiriman</field>
         <field name="arch" type="xml">
-            <form>
+            <form create="false">
+                <style>
+                    .o_form_title {
+                        display: none !important;
+                    }
+                    .o_form_navbar {
+                        display: none !important;
+                    }
+                    a[data-tooltip*="Back to"] {
+                        display: none !important;
+                    }
+                    span.min-w-0.text-truncate {
+                        display: none !important;
+                    }
+                </style>
+                <toolbar/>
                 <header>
-                    <button name="action_change_to_assigned" type="object" string="Tetapkan Penugasan" class="btn-success" invisible="status_penugasan != 'draft'"/>
-                    <button name="action_change_to_running" type="object" string="Mulai Perjalanan" class="btn-info" invisible="status_penugasan not in ('ditugaskan',)"/>
-                    <button name="action_change_to_done" type="object" string="Selesaikan" class="btn-primary" invisible="status_penugasan != 'berjalan'"/>
-                    <button name="action_cancel" type="object" string="Batalkan" class="btn-danger"/>
+                    <div class="d-flex justify-content-between">
+                        <button string="Kembali" class="btn btn-secondary btn-lg" special="cancel"/>
+                        <div/>
+                    </div>
+                    <button name="action_change_to_assigned" type="object" string="Tetapkan Penugasan" class="btn btn-success btn-lg" invisible="status_penugasan != 'draft'"/>
+                    <button name="action_change_to_running" type="object" string="Mulai Perjalanan" class="btn btn-info btn-lg" invisible="status_penugasan not in ('ditugaskan',)"/>
+                    <button name="action_change_to_done" type="object" string="Selesaikan" class="btn btn-primary btn-lg" invisible="status_penugasan != 'berjalan'"/>
+                    <button name="action_cancel" type="object" string="Batalkan" class="btn btn-danger btn-lg"/>
                     <field name="status_penugasan" widget="statusbar" statusbar_visible="draft,ditugaskan,berjalan,selesai,batal"/>
                 </header>
                 <sheet>

@@ -20,8 +20,27 @@
         <field name="name">tritunggal.pengiriman.form</field>
         <field name="model">tritunggal.pengiriman</field>
         <field name="arch" type="xml">
-            <form>
+            <form create="false">
+                <style>
+                    .o_form_title {
+                        display: none !important;
+                    }
+                    .o_form_navbar {
+                        display: none !important;
+                    }
+                    a[data-tooltip*="Back to"] {
+                        display: none !important;
+                    }
+                    span.min-w-0.text-truncate {
+                        display: none !important;
+                    }
+                </style>
+                <toolbar/>
                 <header>
+                    <div class="d-flex justify-content-between">
+                        <button string="Kembali" class="btn btn-secondary btn-lg" special="cancel"/>
+                        <div/>
+                    </div>
                     <field name="status_pengiriman" widget="statusbar" statusbar_visible="draft,berangkat,dalam_perjalanan,tiba,terkendala"/>
                 </header>
                 <sheet>

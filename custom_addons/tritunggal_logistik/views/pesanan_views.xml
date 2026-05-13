@@ -20,11 +20,30 @@
         <field name="name">tritunggal.pesanan.form</field>
         <field name="model">tritunggal.pesanan</field>
         <field name="arch" type="xml">
-            <form>
+            <form create="false">
+                <style>
+                    .o_form_title {
+                        display: none !important;
+                    }
+                    .o_form_navbar {
+                        display: none !important;
+                    }
+                    a[data-tooltip*="Back to"] {
+                        display: none !important;
+                    }
+                    span.min-w-0.text-truncate {
+                        display: none !important;
+                    }
+                </style>
+                <toolbar/>
                 <header>
-                    <button name="action_verify" type="object" string="Verifikasi" class="btn-primary" invisible="status_pesanan != 'draft'"/>
-                    <button name="action_create_penugasan_draft" type="object" string="Buat Penugasan Pengiriman" class="btn-success" invisible="status_pesanan != 'terverifikasi'"/>
-                    <button name="action_complete" type="object" string="Selesaikan" class="btn-primary" invisible="status_pesanan != 'terverifikasi'"/>
+                    <div class="d-flex justify-content-between">
+                        <button string="Kembali" class="btn btn-secondary btn-lg" special="cancel"/>
+                        <div/>
+                    </div>
+                    <button name="action_verify" type="object" string="Verifikasi" class="btn btn-primary btn-lg" invisible="status_pesanan != 'draft'"/>
+                    <button name="action_create_penugasan_draft" type="object" string="Buat Penugasan Pengiriman" class="btn btn-success btn-lg" invisible="status_pesanan != 'terverifikasi'"/>
+                    <button name="action_complete" type="object" string="Selesaikan" class="btn btn-primary btn-lg" invisible="status_pesanan != 'terverifikasi'"/>
                     <field name="status_pesanan" widget="statusbar" statusbar_visible="draft,terverifikasi,selesai"/>
                 </header>
                 <sheet>
