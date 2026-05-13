@@ -12,6 +12,11 @@ class TritunggalPesanan(models.Model):
 
     id_pesanan = fields.Char(string='ID Pesanan', required=True)
     tgl_pesanan = fields.Date(string='Tanggal Pesanan', default=fields.Date.context_today, required=True)
+    partner_id = fields.Many2one(
+        comodel_name='res.partner',
+        string='Customer',
+        ondelete='set null',
+    )
     alamat_asal = fields.Char(string='Alamat Asal', required=True)
     alamat_tujuan = fields.Char(string='Alamat Tujuan', required=True)
     status_pesanan = fields.Selection(

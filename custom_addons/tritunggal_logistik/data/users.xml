@@ -16,6 +16,29 @@
         <field name="groups_id" eval="[(6, 0, [ref('base.group_user'), ref('tritunggal_logistik.group_tritunggal_operasional')])]"/>
     </record>
 
+    <record id="partner_tritunggal_customer" model="res.partner">
+        <field name="name">Customer Tritunggal</field>
+        <field name="email">customer@tritunggal.local</field>
+        <field name="company_type">person</field>
+    </record>
+
+    <record id="user_tritunggal_customer" model="res.users">
+        <field name="name">Customer Tritunggal</field>
+        <field name="login">customer</field>
+        <field name="password">customer123</field>
+        <field name="email">customer@tritunggal.local</field>
+        <field name="partner_id" ref="partner_tritunggal_customer"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_portal')])]"/>
+    </record>
+
+    <record id="user_tritunggal_maintenance" model="res.users">
+        <field name="name">Maintenance Tritunggal</field>
+        <field name="login">maintenance</field>
+        <field name="password">maintenance123</field>
+        <field name="email">maintenance@tritunggal.local</field>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_user'), ref('tritunggal_logistik.group_tritunggal_maintenance')])]"/>
+    </record>
+
     <record id="user_tritunggal_supir" model="res.users">
         <field name="name">Supir Tritunggal</field>
         <field name="login">supir</field>

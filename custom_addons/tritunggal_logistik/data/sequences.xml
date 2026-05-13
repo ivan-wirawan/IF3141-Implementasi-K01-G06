@@ -48,4 +48,11 @@
         <field name="prefix">LPR-</field>
         <field name="padding">5</field>
     </record>
+
+    <record id="seq_tritunggal_riwayat_perawatan" model="ir.sequence">
+        <field name="name">Tritunggal Riwayat Perawatan</field>
+        <field name="code">tritunggal.riwayat_perawatan</field>
+        <field name="prefix">RWT-</field>
+        <field name="padding">5</field>
+    </record>
 </odoo>

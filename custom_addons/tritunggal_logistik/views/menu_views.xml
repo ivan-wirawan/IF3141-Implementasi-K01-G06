@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <menuitem id="menu_tritunggal_root" name="Tritunggal Logistik" sequence="10"/>
+    <menuitem id="menu_tritunggal_root" name="Tritunggal Logistik" sequence="10" groups="base.group_system,tritunggal_logistik.group_tritunggal_marketing,tritunggal_logistik.group_tritunggal_operasional,tritunggal_logistik.group_tritunggal_maintenance,tritunggal_logistik.group_tritunggal_supir,tritunggal_logistik.group_tritunggal_keuangan"/>
 
-    <menuitem id="menu_tritunggal_pesanan" name="Pesanan" parent="menu_tritunggal_root" action="action_tritunggal_pesanan" sequence="10"/>
-    <menuitem id="menu_tritunggal_item_pesanan" name="Item Pesanan" parent="menu_tritunggal_root" action="action_tritunggal_item_pesanan" sequence="20"/>
-    <menuitem id="menu_tritunggal_pengiriman" name="Pengiriman" parent="menu_tritunggal_root" action="action_tritunggal_pengiriman" sequence="30"/>
-    <menuitem id="menu_tritunggal_pengiriman_supir" name="Pengiriman Harian" parent="menu_tritunggal_root" action="action_tritunggal_pengiriman_supir" sequence="35" groups="tritunggal_logistik.group_tritunggal_supir"/>
-    <menuitem id="menu_tritunggal_penugasan_pengiriman" name="Penugasan Pengiriman" parent="menu_tritunggal_root" action="action_tritunggal_penugasan_pengiriman" sequence="37" groups="tritunggal_logistik.group_tritunggal_operasional,tritunggal_logistik.group_tritunggal_supir"/>
-    <menuitem id="menu_tritunggal_armada" name="Armada" parent="menu_tritunggal_root" action="action_tritunggal_armada" sequence="40"/>
-    <menuitem id="menu_tritunggal_laporan_kerusakan" name="Laporan Kerusakan" parent="menu_tritunggal_root" action="action_tritunggal_laporan_kerusakan" sequence="45" groups="tritunggal_logistik.group_tritunggal_supir,tritunggal_logistik.group_tritunggal_operasional"/>
-    <menuitem id="menu_tritunggal_invoice" name="Invoice" parent="menu_tritunggal_root" action="action_tritunggal_invoice" sequence="50"/>
+    <menuitem id="menu_tritunggal_pesanan" name="Pesanan" parent="menu_tritunggal_root" action="action_tritunggal_pesanan" sequence="10" groups="base.group_system,tritunggal_logistik.group_tritunggal_marketing,tritunggal_logistik.group_tritunggal_operasional"/>
+    <menuitem id="menu_tritunggal_item_pesanan" name="Item Pesanan" parent="menu_tritunggal_root" action="action_tritunggal_item_pesanan" sequence="20" groups="base.group_system,tritunggal_logistik.group_tritunggal_marketing"/>
+    <menuitem id="menu_tritunggal_pengiriman" name="Pengiriman" parent="menu_tritunggal_root" action="action_tritunggal_pengiriman" sequence="30" groups="base.group_system,tritunggal_logistik.group_tritunggal_operasional,tritunggal_logistik.group_tritunggal_maintenance"/>
+    <menuitem id="menu_tritunggal_pengiriman_supir" name="Pengiriman Harian" parent="menu_tritunggal_root" action="action_tritunggal_pengiriman_supir" sequence="35" groups="base.group_system,tritunggal_logistik.group_tritunggal_supir"/>
+    <menuitem id="menu_tritunggal_penugasan_pengiriman" name="Penugasan Pengiriman" parent="menu_tritunggal_root" action="action_tritunggal_penugasan_pengiriman" sequence="37" groups="base.group_system,tritunggal_logistik.group_tritunggal_operasional,tritunggal_logistik.group_tritunggal_supir"/>
+    <menuitem id="menu_tritunggal_armada" name="Armada" parent="menu_tritunggal_root" action="action_tritunggal_armada" sequence="40" groups="base.group_system,tritunggal_logistik.group_tritunggal_operasional,tritunggal_logistik.group_tritunggal_maintenance"/>
+    <menuitem id="menu_tritunggal_laporan_kerusakan" name="Laporan Kerusakan" parent="menu_tritunggal_root" action="action_tritunggal_laporan_kerusakan" sequence="45" groups="base.group_system,tritunggal_logistik.group_tritunggal_supir,tritunggal_logistik.group_tritunggal_operasional,tritunggal_logistik.group_tritunggal_maintenance"/>
+    <menuitem id="menu_tritunggal_riwayat_perawatan" name="Riwayat Perawatan" parent="menu_tritunggal_root" action="action_tritunggal_riwayat_perawatan" sequence="47" groups="base.group_system,tritunggal_logistik.group_tritunggal_operasional,tritunggal_logistik.group_tritunggal_maintenance"/>
+    <menuitem id="menu_tritunggal_invoice" name="Invoice" parent="menu_tritunggal_root" action="action_tritunggal_invoice" sequence="50" groups="base.group_system,tritunggal_logistik.group_tritunggal_marketing,tritunggal_logistik.group_tritunggal_keuangan"/>
 </odoo>

@@ -5,3 +5,4 @@ from . import pengiriman
 from . import penugasan_pengiriman
 from . import invoice
 from . import laporan_kerusakan
+from . import riwayat_perawatan

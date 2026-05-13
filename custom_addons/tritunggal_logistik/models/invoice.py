@@ -10,6 +10,19 @@ class TritunggalInvoice(models.Model):
     tgl_terbit = fields.Date(string='Tanggal Terbit', default=fields.Date.context_today)
     tgl_jatuh_tempo = fields.Date(string='Tanggal Jatuh Tempo')
     status_pembayaran = fields.Char(string='Status Pembayaran')
+    partner_id = fields.Many2one(
+        comodel_name='res.partner',
+        related='pesanan_id.partner_id',
+        string='Customer',
+        store=True,
+        readonly=True,
+    )
+    total_biaya = fields.Float(
+        related='pesanan_id.total_biaya',
+        string='Total Biaya',
+        store=True,
+        readonly=True,
+    )
 
     pesanan_id = fields.Many2one(
         comodel_name='tritunggal.pesanan',

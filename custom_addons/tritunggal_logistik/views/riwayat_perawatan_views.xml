@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_tritunggal_riwayat_perawatan_tree" model="ir.ui.view">
+        <field name="name">tritunggal.riwayat_perawatan.tree</field>
+        <field name="model">tritunggal.riwayat_perawatan</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="id_perawatan"/>
+                <field name="armada_id"/>
+                <field name="tanggal_perawatan"/>
+                <field name="jenis_perawatan"/>
+                <field name="petugas_id"/>
+                <field name="biaya"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tritunggal_riwayat_perawatan_form" model="ir.ui.view">
+        <field name="name">tritunggal.riwayat_perawatan.form</field>
+        <field name="model">tritunggal.riwayat_perawatan</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="id_perawatan"/>
+                            <field name="armada_id"/>
+                            <field name="tanggal_perawatan"/>
+                        </group>
+                        <group>
+                            <field name="jenis_perawatan"/>
+                            <field name="petugas_id"/>
+                            <field name="biaya"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="deskripsi"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tritunggal_riwayat_perawatan" model="ir.actions.act_window">
+        <field name="name">Riwayat Perawatan</field>
+        <field name="res_model">tritunggal.riwayat_perawatan</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

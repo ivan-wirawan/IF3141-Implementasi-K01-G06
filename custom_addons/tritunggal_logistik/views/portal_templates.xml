@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="portal_home_template" name="Tritunggal Customer Portal Home">
+        <t t-call="portal.portal_layout">
+            <div class="container py-4">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="mb-2">Portal Tritunggal Logistik</h2>
+                        <p class="text-muted mb-0">Selamat datang, <t t-esc="partner.name"/>. Di sini Anda bisa memantau pesanan dan invoice.</p>
+                    </div>
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <a class="btn btn-primary w-100" href="/my/tritunggal/pesanan/new">Buat Pesanan Baru</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a class="btn btn-outline-primary w-100" href="/my/tritunggal/pesanan">Lihat Pesanan</a>
+                    </div>
+                    <div class="col-md-4">
+                        <a class="btn btn-outline-secondary w-100" href="/my/tritunggal/invoice">Lihat Invoice</a>
+                    </div>
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <div class="text-uppercase text-muted small">Total Pesanan</div>
+                                <div class="display-6"><t t-esc="pesanan_count"/></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <div class="text-uppercase text-muted small">Total Invoice</div>
+                                <div class="display-6"><t t-esc="invoice_count"/></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header"><strong>Pesanan Terbaru</strong></div>
+                            <div class="card-body p-0">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Status</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="pesanan_recent" t-as="pesanan">
+                                            <tr>
+                                                <td><t t-esc="pesanan.id_pesanan"/></td>
+                                                <td><t t-esc="pesanan.status_pesanan"/></td>
+                                                <td><t t-esc="pesanan.total_biaya"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header"><strong>Invoice Terbaru</strong></div>
+                            <div class="card-body p-0">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Pesanan</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="invoice_recent" t-as="invoice">
+                                            <tr>
+                                                <td><t t-esc="invoice.id_invoice"/></td>
+                                                <td><t t-esc="invoice.pesanan_id.id_pesanan"/></td>
+                                                <td><t t-esc="invoice.status_pembayaran"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_pesanan_list_template" name="Tritunggal Customer Portal Pesanan List">
+        <t t-call="portal.portal_layout">
+            <div class="container py-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0">Pesanan Saya</h2>
+                    <a class="btn btn-primary" href="/my/tritunggal/pesanan/new">Buat Pesanan</a>
+                </div>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID Pesanan</th>
+                                    <th>Tanggal</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="pesanan_list" t-as="pesanan">
+                                    <tr>
+                                        <td><t t-esc="pesanan.id_pesanan"/></td>
+                                        <td><t t-esc="pesanan.tgl_pesanan"/></td>
+                                        <td><t t-esc="pesanan.status_pesanan"/></td>
+                                        <td><t t-esc="pesanan.total_biaya"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_invoice_list_template" name="Tritunggal Customer Portal Invoice List">
+        <t t-call="portal.portal_layout">
+            <div class="container py-4">
+                <h2 class="mb-3">Invoice Saya</h2>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID Invoice</th>
+                                    <th>Pesanan</th>
+                                    <th>Jatuh Tempo</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="invoice_list" t-as="invoice">
+                                    <tr>
+                                        <td><t t-esc="invoice.id_invoice"/></td>
+                                        <td><t t-esc="invoice.pesanan_id.id_pesanan"/></td>
+                                        <td><t t-esc="invoice.tgl_jatuh_tempo"/></td>
+                                        <td><t t-esc="invoice.total_biaya"/></td>
+                                        <td><t t-esc="invoice.status_pembayaran"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_new_pesanan_template" name="Tritunggal Customer Portal New Pesanan">
+        <t t-call="portal.portal_layout">
+            <div class="container py-4">
+                <h2 class="mb-3">Buat Pesanan Baru</h2>
+                <t t-if="success">
+                    <div class="alert alert-success">Pesanan berhasil dikirim dan menunggu verifikasi.</div>
+                </t>
+                <t t-if="error_message">
+                    <div class="alert alert-danger"><t t-esc="error_message"/></div>
+                </t>
+                <form method="post" action="/my/tritunggal/pesanan/new" class="card p-4">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Alamat Asal</label>
+                            <input type="text" name="alamat_asal" class="form-control" required="required"/>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Alamat Tujuan</label>
+                            <input type="text" name="alamat_tujuan" class="form-control" required="required"/>
+                        </div>
+                    </div>
+                    <div class="table-responsive mb-3">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Jumlah</th>
+                                    <th>Volume</th>
+                                    <th>Berat</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="number" name="jumlah_barang_1" class="form-control" min="1"/></td>
+                                    <td><input type="number" step="0.01" name="volume_barang_1" class="form-control"/></td>
+                                    <td><input type="number" step="0.01" name="berat_barang_1" class="form-control"/></td>
+                                    <td><input type="number" step="0.01" name="subtotal_harga_1" class="form-control"/></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="number" name="jumlah_barang_2" class="form-control" min="1"/></td>
+                                    <td><input type="number" step="0.01" name="volume_barang_2" class="form-control"/></td>
+                                    <td><input type="number" step="0.01" name="berat_barang_2" class="form-control"/></td>
+                                    <td><input type="number" step="0.01" name="subtotal_harga_2" class="form-control"/></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="number" name="jumlah_barang_3" class="form-control" min="1"/></td>
+                                    <td><input type="number" step="0.01" name="volume_barang_3" class="form-control"/></td>
+                                    <td><input type="number" step="0.01" name="berat_barang_3" class="form-control"/></td>
+                                    <td><input type="number" step="0.01" name="subtotal_harga_3" class="form-control"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Kirim Pesanan</button>
+                        <a class="btn btn-outline-secondary" href="/my/tritunggal/pesanan">Batal</a>
+                    </div>
+                </form>
+            </div>
+        </t>
+    </template>
+</odoo>

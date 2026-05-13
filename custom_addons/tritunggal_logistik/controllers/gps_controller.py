@@ -3,7 +3,7 @@ from odoo.http import request
 
 
 class TritunggalGpsController(http.Controller):
-    @http.route('/tritunggal_logistik/gps/update', type='json', auth='user', methods=['POST'], csrf=False)
+    @http.route('/tritunggal_logistik/gps/update', type='json', auth='public', methods=['POST'], csrf=False)
     def update_gps(self, **payload):
         pengiriman_id = payload.get('pengiriman_id')
         kode_pengiriman = payload.get('id_pengiriman')
@@ -11,6 +11,13 @@ class TritunggalGpsController(http.Controller):
         lng = payload.get('lng')
         timestamp = payload.get('timestamp')
         lokasi = payload.get('lokasi')
+        api_key = payload.get('api_key') or request.httprequest.headers.get('X-Tritunggal-GPS-Token')
+
+        configured_token = request.env['ir.config_parameter'].sudo().get_param('tritunggal_logistik.gps_api_token')
+        if not configured_token:
+            return {'success': False, 'message': 'Token GPS belum dikonfigurasi di pengaturan sistem'}
+        if api_key != configured_token:
+            return {'success': False, 'message': 'Token GPS tidak valid'}
 
         if lat is None or lng is None:
             return {'success': False, 'message': 'lat dan lng wajib diisi'}
