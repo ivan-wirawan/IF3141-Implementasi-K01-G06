@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_tritunggal_penugasan_pengiriman_tree" model="ir.ui.view">
+        <field name="name">tritunggal.penugasan_pengiriman.tree</field>
+        <field name="model">tritunggal.penugasan_pengiriman</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="id_penugasan"/>
+                <field name="tgl_penugasan"/>
+                <field name="pesanan_id"/>
+                <field name="nama_supir"/>
+                <field name="nama_employee"/>
+                <field name="armada_id"/>
+                <field name="status_penugasan"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tritunggal_penugasan_pengiriman_form" model="ir.ui.view">
+        <field name="name">tritunggal.penugasan_pengiriman.form</field>
+        <field name="model">tritunggal.penugasan_pengiriman</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="status_penugasan" widget="statusbar" statusbar_visible="draft,ditugaskan,berjalan,selesai,batal"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="id_penugasan"/>
+                            <field name="tgl_penugasan"/>
+                            <field name="status_penugasan"/>
+                        </group>
+                        <group>
+                            <field name="pesanan_id"/>
+                            <field name="pengiriman_id"/>
+                            <field name="armada_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="supir_id"/>
+                            <field name="employee_id"/>
+                        </group>
+                        <group>
+                            <field name="nama_supir" readonly="1"/>
+                            <field name="nama_employee" readonly="1"/>
+                            <field name="plat_nomor" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="alamat_tujuan" readonly="1"/>
+                        <field name="catatan"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tritunggal_penugasan_pengiriman" model="ir.actions.act_window">
+        <field name="name">Penugasan Pengiriman</field>
+        <field name="res_model">tritunggal.penugasan_pengiriman</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

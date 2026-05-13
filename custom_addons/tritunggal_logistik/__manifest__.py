@@ -3,7 +3,7 @@
     'version': '1.0',
     'category': 'Logistics/ERP',
     'summary': 'Modul logistik untuk CV Tritunggal Transportindo',
-    'depends': ['base'],
+    'depends': ['base', 'hr'],
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
@@ -13,6 +13,7 @@
         'views/pesanan_views.xml',
         'views/item_pesanan_views.xml',
         'views/pengiriman_views.xml',
+        'views/penugasan_pengiriman_views.xml',
         'views/armada_views.xml',
         'views/laporan_kerusakan_views.xml',
         'views/invoice_views.xml',

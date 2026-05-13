@@ -21,6 +21,13 @@
         <field name="padding">5</field>
     </record>
 
+    <record id="seq_tritunggal_penugasan_pengiriman" model="ir.sequence">
+        <field name="name">Tritunggal Penugasan Pengiriman</field>
+        <field name="code">tritunggal.penugasan_pengiriman</field>
+        <field name="prefix">PUG-</field>
+        <field name="padding">5</field>
+    </record>
+
     <record id="seq_tritunggal_armada" model="ir.sequence">
         <field name="name">Tritunggal Armada</field>
         <field name="code">tritunggal.armada</field>
