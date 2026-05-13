@@ -38,7 +38,6 @@
                 <toolbar/>
                 <header>
                     <div class="d-flex justify-content-between">
-                        <button string="Kembali" class="btn btn-secondary btn-lg" special="cancel"/>
                         <button name="%(action_report_tritunggal_invoice)d" type="action" string="Print PDF" class="btn btn-primary btn-lg"/>
                     </div>
                 </header>

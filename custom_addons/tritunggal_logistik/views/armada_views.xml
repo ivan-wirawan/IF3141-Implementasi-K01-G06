@@ -37,7 +37,6 @@
                 <toolbar/>
                 <header>
                     <div class="d-flex justify-content-between">
-                        <button string="Kembali" class="btn btn-secondary btn-lg" special="cancel"/>
                         <div/>
                     </div>
                 </header>

@@ -48,11 +48,21 @@ class TritunggalRiwayatPerawatan(models.Model):
         ),
     ]
 
+    def _get_next_id(self):
+        """Generate next incremental ID for riwayat perawatan."""
+        next_number = 0
+        for record in self.search([]):
+            identifier = record.id_perawatan or ''
+            digits = ''.join(ch for ch in identifier if ch.isdigit())
+            if digits:
+                next_number = max(next_number, int(digits))
+        return str(next_number + 1)
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             if not vals.get('id_perawatan'):
-                vals['id_perawatan'] = self.env['ir.sequence'].next_by_code('tritunggal.riwayat_perawatan')
+                vals['id_perawatan'] = self._get_next_id()
         records = super().create(vals_list)
         for record in records:
             if record.armada_id:
@@ -60,3 +70,7 @@ class TritunggalRiwayatPerawatan(models.Model):
                 if record.armada_id.status_armada == 'perbaikan':
                     record.armada_id.write({'status_armada': 'tersedia'})
         return records
+
+    def action_back(self):
+        """Close the current window without saving changes"""
+        return {'type': 'ir.actions.act_window_close'}

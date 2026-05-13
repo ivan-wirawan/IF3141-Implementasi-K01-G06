@@ -35,9 +35,23 @@ class TritunggalInvoice(models.Model):
         ('pesanan_unique', 'unique(pesanan_id)', 'Invoice untuk pesanan ini sudah ada.'),
     ]
 
+    def _get_next_id(self):
+        """Generate next incremental ID for invoice."""
+        next_number = 0
+        for record in self.search([]):
+            identifier = record.id_invoice or ''
+            digits = ''.join(ch for ch in identifier if ch.isdigit())
+            if digits:
+                next_number = max(next_number, int(digits))
+        return str(next_number + 1)
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             if not vals.get('id_invoice'):
-                vals['id_invoice'] = self.env['ir.sequence'].next_by_code('tritunggal.invoice')
+                vals['id_invoice'] = self._get_next_id()
         return super().create(vals_list)
+
+    def action_back(self):
+        """Close the current window without saving changes"""
+        return {'type': 'ir.actions.act_window_close'}

@@ -10,7 +10,7 @@ class TritunggalPesanan(models.Model):
     _rec_name = 'id_pesanan'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    id_pesanan = fields.Char(string='ID Pesanan', required=True)
+    id_pesanan = fields.Char(string='ID Pesanan', required=True, default=lambda self: self._get_next_id())
     tgl_pesanan = fields.Date(string='Tanggal Pesanan', default=fields.Date.context_today, required=True)
     partner_id = fields.Many2one(
         comodel_name='res.partner',
@@ -101,11 +101,24 @@ class TritunggalPesanan(models.Model):
         self.write({'status_pesanan': 'selesai'})
         return True
 
+    def action_back(self):
+        """Close the current window without saving changes"""
+        return {'type': 'ir.actions.act_window_close'}
+
+    def _get_next_id(self):
+        """Generate next incremental ID for pesanan."""
+        next_number = 0
+        for record in self.search([]):
+            identifier = record.id_pesanan or ''
+            digits = ''.join(ch for ch in identifier if ch.isdigit())
+            if digits:
+                next_number = max(next_number, int(digits))
+        return str(next_number + 1)
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            if not vals.get('id_pesanan'):
-                vals['id_pesanan'] = self.env['ir.sequence'].next_by_code('tritunggal.pesanan')
+            vals['id_pesanan'] = self._get_next_id()
         records = super().create(vals_list)
         records.filtered(lambda rec: rec.status_pesanan == 'terverifikasi').generate_invoice()
         return records

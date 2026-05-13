@@ -145,11 +145,21 @@ class TritunggalPenugasanPengiriman(models.Model):
                     'Pilih employee yang berbeda dari supir.'
                 )
 
+    def _get_next_id(self):
+        """Generate next incremental ID for penugasan pengiriman."""
+        next_number = 0
+        for record in self.search([]):
+            identifier = record.id_penugasan or ''
+            digits = ''.join(ch for ch in identifier if ch.isdigit())
+            if digits:
+                next_number = max(next_number, int(digits))
+        return str(next_number + 1)
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             if not vals.get('id_penugasan'):
-                vals['id_penugasan'] = self.env['ir.sequence'].next_by_code('tritunggal.penugasan_pengiriman')
+                vals['id_penugasan'] = self._get_next_id()
         records = super().create(vals_list)
         # Log pembuatan penugasan
         for record in records:
@@ -215,3 +225,7 @@ class TritunggalPenugasanPengiriman(models.Model):
         # Call base _search without passing access_rights_uid positionally
         # (some Odoo versions expect fewer positional params).
         return super(TritunggalPenugasanPengiriman, self)._search(args, offset, limit, order, count)
+
+    def action_back(self):
+        """Close the current window without saving changes"""
+        return {'type': 'ir.actions.act_window_close'}

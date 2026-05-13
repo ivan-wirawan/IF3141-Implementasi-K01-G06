@@ -39,7 +39,6 @@
                 <toolbar/>
                 <header>
                     <div class="d-flex justify-content-between">
-                        <button string="Kembali" class="btn btn-secondary btn-lg" special="cancel"/>
                         <div/>
                     </div>
                     <button name="action_change_to_assigned" type="object" string="Tetapkan Penugasan" class="btn btn-success btn-lg" invisible="status_penugasan != 'draft'"/>

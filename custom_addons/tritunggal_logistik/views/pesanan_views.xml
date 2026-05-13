@@ -5,7 +5,7 @@
         <field name="model">tritunggal.pesanan</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="id_pesanan"/>
+                <field name="id_pesanan" readonly="1"/>
                 <field name="partner_id"/>
                 <field name="tgl_pesanan"/>
                 <field name="alamat_asal"/>
@@ -31,14 +31,10 @@
                     a[data-tooltip*="Back to"] {
                         display: none !important;
                     }
-                    span.min-w-0.text-truncate {
-                        display: none !important;
-                    }
                 </style>
                 <toolbar/>
                 <header>
                     <div class="d-flex justify-content-between">
-                        <button string="Kembali" class="btn btn-secondary btn-lg" special="cancel"/>
                         <div/>
                     </div>
                     <button name="action_verify" type="object" string="Verifikasi" class="btn btn-primary btn-lg" invisible="status_pesanan != 'draft'"/>
@@ -49,7 +45,7 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="id_pesanan"/>
+                            <field name="id_pesanan" readonly="1"/>
                             <field name="partner_id"/>
                             <field name="tgl_pesanan"/>
                         </group>

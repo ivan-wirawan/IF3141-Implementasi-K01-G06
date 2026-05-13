@@ -38,7 +38,6 @@
                 <toolbar/>
                 <header>
                     <div class="d-flex justify-content-between">
-                        <button string="Kembali" class="btn btn-secondary btn-lg" special="cancel"/>
                         <div/>
                     </div>
                     <field name="status_pengiriman" widget="statusbar" statusbar_visible="draft,berangkat,dalam_perjalanan,tiba,terkendala"/>

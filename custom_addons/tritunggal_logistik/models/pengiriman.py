@@ -86,11 +86,21 @@ class TritunggalPengiriman(models.Model):
     def catatKoordinat(self, lat, lng, timestamp=None, lokasi=None):
         return self.catat_koordinat(lat=lat, lng=lng, timestamp=timestamp, lokasi=lokasi)
 
+    def _get_next_id(self):
+        """Generate next incremental ID for pengiriman."""
+        next_number = 0
+        for record in self.search([]):
+            identifier = record.id_pengiriman or ''
+            digits = ''.join(ch for ch in identifier if ch.isdigit())
+            if digits:
+                next_number = max(next_number, int(digits))
+        return str(next_number + 1)
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             if not vals.get('id_pengiriman'):
-                vals['id_pengiriman'] = self.env['ir.sequence'].next_by_code('tritunggal.pengiriman')
+                vals['id_pengiriman'] = self._get_next_id()
         records = super().create(vals_list)
         for record in records:
             if record.armada_id:
@@ -103,3 +113,7 @@ class TritunggalPengiriman(models.Model):
             if armada:
                 self._assign_armada(armada)
         return super().write(vals)
+
+    def action_back(self):
+        """Close the current window without saving changes"""
+        return {'type': 'ir.actions.act_window_close'}

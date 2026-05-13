@@ -42,11 +42,21 @@ class TritunggalArmada(models.Model):
     def cekKetersediaan(self):
         return self.cek_ketersediaan()
 
+    def _get_next_id(self):
+        """Generate next incremental ID for armada."""
+        next_number = 0
+        for record in self.search([]):
+            identifier = record.id_armada or ''
+            digits = ''.join(ch for ch in identifier if ch.isdigit())
+            if digits:
+                next_number = max(next_number, int(digits))
+        return str(next_number + 1)
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             if not vals.get('id_armada'):
-                vals['id_armada'] = self.env['ir.sequence'].next_by_code('tritunggal.armada')
+                vals['id_armada'] = self._get_next_id()
         records = super().create(vals_list)
         # Log pembuatan armada
         for record in records:
@@ -55,3 +65,7 @@ class TritunggalArmada(models.Model):
                 message_type='notification',
             )
         return records
+
+    def action_back(self):
+        """Close the current window without saving changes"""
+        return {'type': 'ir.actions.act_window_close'}
