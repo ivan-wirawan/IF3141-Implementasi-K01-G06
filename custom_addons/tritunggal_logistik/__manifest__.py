@@ -20,6 +20,7 @@
         'views/invoice_views.xml',
         'views/menu_views.xml',
         'views/portal_templates.xml',
+        'views/website_branding.xml',
     ],
     'demo': [
         'demo/demo.xml',

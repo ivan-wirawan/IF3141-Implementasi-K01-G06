@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Keep the website chrome focused on Tritunggal branding. -->
+    <record id="website.header_search_box" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="website.header_text_element" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="website.header_call_to_action" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <template id="tritunggal_hide_header_call_to_action" inherit_id="website.header_call_to_action" name="Hide Header Contact Button">
+        <xpath expr="//li" position="replace"/>
+    </template>
+
+    <delete id="website.menu_contactus" model="website.menu"/>
+
+    <record id="website.header_social_links" model="ir.ui.view">
+        <field name="active" eval="False"/>
+    </record>
+
+    <template id="tritunggal_footer_content" inherit_id="website.footer_custom" name="Tritunggal Empty Footer">
+        <xpath expr="//div[@id='footer']" position="replace">
+            <div id="footer" t-if="not no_footer"/>
+        </xpath>
+    </template>
+
+    <template id="tritunggal_footer_copyright" inherit_id="website.layout" name="Tritunggal Copyright">
+        <xpath expr="//span[hasclass('o_footer_copyright_name')]" position="replace">
+            <span class="o_footer_copyright_name me-2">Copyright © Tritunggal Transportindo</span>
+        </xpath>
+    </template>
+
+    <template id="tritunggal_hide_brand_promotion" inherit_id="web.brand_promotion" name="Hide Odoo Brand Promotion">
+        <xpath expr="//div[hasclass('o_brand_promotion')]" position="replace"/>
+    </template>
+
+    <template id="tritunggal_hide_login_footer" inherit_id="web.login_layout" name="Hide Login Footer Promotion">
+        <xpath expr="//div[contains(@class, 'border-top') and contains(@class, 'mt-4')]" position="replace"/>
+    </template>
+</odoo>
