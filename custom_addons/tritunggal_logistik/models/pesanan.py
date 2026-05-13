@@ -119,7 +119,7 @@ class TritunggalPesanan(models.Model):
     def action_create_penugasan_draft(self):
         """
         Tombol untuk membuat draf Penugasan Pengiriman otomatis
-        saat pesanan dikonfirmasi
+        saat pesanan dikonfirmasi dan menampilkan konfirmasi
         """
         for record in self:
             if record.status_pesanan != 'terverifikasi':
@@ -141,12 +141,31 @@ class TritunggalPesanan(models.Model):
                 )
             
             # Buat penugasan draft
-            self.env['tritunggal.penugasan_pengiriman'].create({
+            penugasan = self.env['tritunggal.penugasan_pengiriman'].create({
                 'pesanan_id': record.id,
                 'status_penugasan': 'draft',
             })
             
             record.message_post(
-                body=f'Penugasan pengiriman draft telah dibuat otomatis',
+                body=f'Penugasan pengiriman draft telah dibuat otomatis: {penugasan.id_penugasan}',
                 message_type='notification',
             )
+            
+            # Return action untuk membuka form penugasan dan tampilkan pesan
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Penugasan Pengiriman Dibuat',
+                    'message': f'Penugasan {penugasan.id_penugasan} berhasil dibuat. Silakan isi supir, employee, dan armada sebelum menetapkan penugasan.',
+                    'type': 'success',
+                    'sticky': False,
+                },
+                'next': {
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'tritunggal.penugasan_pengiriman',
+                    'res_id': penugasan.id,
+                    'views': [[False, 'form']],
+                    'target': 'current',
+                }
+            }

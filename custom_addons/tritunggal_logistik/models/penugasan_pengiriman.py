@@ -87,10 +87,10 @@ class TritunggalPenugasanPengiriman(models.Model):
     @api.constrains('supir_id', 'employee_id', 'armada_id', 'status_penugasan')
     def _check_required_fields_for_non_draft(self):
         """
-        Validasi bahwa supir, employee, dan armada wajib diisi ketika status bukan 'draft'
+        Validasi bahwa supir, employee, dan armada wajib diisi ketika status bukan 'draft' atau 'batal'
         """
         for record in self:
-            if record.status_penugasan != 'draft':
+            if record.status_penugasan not in ('draft', 'batal'):
                 if not record.supir_id:
                     raise ValidationError('Field Supir harus diisi ketika penugasan bukan draft.')
                 if not record.employee_id:
@@ -102,11 +102,12 @@ class TritunggalPenugasanPengiriman(models.Model):
     def _check_driver_and_vehicle_availability(self):
         """
         Validasi bahwa supir dan armada tidak sedang bertugas atau perbaikan
+        (skip check jika status adalah 'batal')
         """
         for record in self:
-            # Skip check jika field kosong (untuk draft status)
-            if not record.supir_id or not record.armada_id:
-                return
+            # Skip check jika status batal atau field kosong (untuk draft status)
+            if record.status_penugasan == 'batal' or not record.supir_id or not record.armada_id:
+                continue
                 
             # Cek armada
             if record.armada_id.status_armada != 'tersedia':
@@ -132,10 +133,11 @@ class TritunggalPenugasanPengiriman(models.Model):
     def _check_employee_not_duplicate(self):
         """
         Pastikan employee dalam satu penugasan tidak duplikat dengan supir
+        (skip check jika status adalah 'batal')
         """
         for record in self:
-            # Skip check jika field kosong (untuk draft status)
-            if not record.supir_id or not record.employee_id:
+            # Skip check jika status batal atau field kosong (untuk draft status)
+            if record.status_penugasan == 'batal' or not record.supir_id or not record.employee_id:
                 continue
             if record.supir_id == record.employee_id:
                 raise ValidationError(
