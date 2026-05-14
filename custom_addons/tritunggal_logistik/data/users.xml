@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <record id="base.user_admin" model="res.users">
+        <field name="action_id" ref="tritunggal_logistik.action_tritunggal_pesanan"/>
+    </record>
+
     <record id="user_tritunggal_marketing" model="res.users">
         <field name="name">Marketing Tritunggal</field>
         <field name="login">marketing</field>
         <field name="password">marketing123</field>
         <field name="email">marketing@tritunggal.local</field>
+        <field name="action_id" ref="tritunggal_logistik.action_tritunggal_pesanan"/>
         <field name="groups_id" eval="[(6, 0, [ref('base.group_user'), ref('tritunggal_logistik.group_tritunggal_marketing')])]"/>
     </record>
 
@@ -13,6 +18,7 @@
         <field name="login">operasional</field>
         <field name="password">operasional123</field>
         <field name="email">operasional@tritunggal.local</field>
+        <field name="action_id" ref="tritunggal_logistik.action_tritunggal_pesanan"/>
         <field name="groups_id" eval="[(6, 0, [ref('base.group_user'), ref('tritunggal_logistik.group_tritunggal_operasional')])]"/>
     </record>
 
@@ -52,6 +58,7 @@
         <field name="login">maintenance</field>
         <field name="password">maintenance123</field>
         <field name="email">maintenance@tritunggal.local</field>
+        <field name="action_id" ref="tritunggal_logistik.action_tritunggal_pesanan"/>
         <field name="groups_id" eval="[(6, 0, [ref('base.group_user'), ref('tritunggal_logistik.group_tritunggal_maintenance')])]"/>
     </record>
 
@@ -60,6 +67,9 @@
         <field name="login">supir</field>
         <field name="password">supir123</field>
         <field name="email">supir@tritunggal.local</field>
+        <field name="action_id" ref="tritunggal_logistik.action_tritunggal_pesanan"/>
         <field name="groups_id" eval="[(6, 0, [ref('base.group_user'), ref('tritunggal_logistik.group_tritunggal_supir')])]"/>
     </record>
+
+    <function model="res.users" name="write" eval="[[ref('base.user_admin')], {'action_id': ref('tritunggal_logistik.action_tritunggal_pesanan')}]"/>
 </odoo>
