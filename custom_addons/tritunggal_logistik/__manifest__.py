@@ -12,6 +12,7 @@
         'report/invoice_report.xml',
         'views/pesanan_views.xml',
         'views/item_pesanan_views.xml',
+        'views/res_partner_views.xml',
         'views/pengiriman_views.xml',
         'views/penugasan_pengiriman_views.xml',
         'views/armada_views.xml',

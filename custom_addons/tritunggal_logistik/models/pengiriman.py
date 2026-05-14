@@ -27,6 +27,21 @@ class TritunggalPengiriman(models.Model):
     gps_lat = fields.Float(string='GPS Latitude')
     gps_lng = fields.Float(string='GPS Longitude')
     gps_timestamp = fields.Datetime(string='GPS Timestamp')
+    delivery_provider_type = fields.Selection(
+        [
+            ('internal', 'Internal'),
+            ('outsource', 'Outsource'),
+        ],
+        string='Tipe Vendor',
+        default='internal',
+        required=True,
+    )
+    mitra_outsourcing_id = fields.Many2one(
+        comodel_name='res.partner',
+        string='Vendor Outsource',
+        domain=[('is_tritunggal_outsource_vendor', '=', True)],
+        ondelete='set null',
+    )
 
     pesanan_id = fields.Many2one(
         comodel_name='tritunggal.pesanan',
@@ -44,6 +59,16 @@ class TritunggalPengiriman(models.Model):
         if armada:
             armada.cek_ketersediaan()
             armada.write({'status_armada': 'digunakan'})
+
+    @api.constrains('delivery_provider_type', 'mitra_outsourcing_id', 'armada_id')
+    def _check_delivery_provider(self):
+        for record in self:
+            if record.delivery_provider_type == 'outsource' and not record.mitra_outsourcing_id:
+                raise ValidationError('Vendor outsource wajib diisi untuk pengiriman outsource.')
+            if record.delivery_provider_type == 'outsource' and record.armada_id:
+                raise ValidationError('Armada internal tidak boleh diisi untuk pengiriman outsource.')
+            if record.delivery_provider_type == 'internal' and record.mitra_outsourcing_id:
+                raise ValidationError('Vendor outsource hanya boleh diisi untuk pengiriman outsource.')
 
     def update_status_logistik(self, status=None, lokasi=None, bukti=None):
         for record in self:
@@ -101,14 +126,20 @@ class TritunggalPengiriman(models.Model):
         for vals in vals_list:
             if not vals.get('id_pengiriman'):
                 vals['id_pengiriman'] = self._get_next_id()
+            if vals.get('mitra_outsourcing_id'):
+                vals['delivery_provider_type'] = 'outsource'
+                vals['armada_id'] = False
         records = super().create(vals_list)
         for record in records:
-            if record.armada_id:
+            if record.delivery_provider_type == 'internal' and record.armada_id:
                 record._assign_armada(record.armada_id)
         return records
 
     def write(self, vals):
-        if vals.get('armada_id'):
+        if vals.get('mitra_outsourcing_id'):
+            vals['delivery_provider_type'] = 'outsource'
+            vals['armada_id'] = False
+        if vals.get('armada_id') and vals.get('delivery_provider_type', self[:1].delivery_provider_type) == 'internal':
             armada = self.env['tritunggal.armada'].browse(vals['armada_id'])
             if armada:
                 self._assign_armada(armada)

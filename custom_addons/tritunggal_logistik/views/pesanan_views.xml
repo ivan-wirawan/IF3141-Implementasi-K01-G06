@@ -10,6 +10,9 @@
                 <field name="tgl_pesanan"/>
                 <field name="alamat_asal"/>
                 <field name="alamat_tujuan"/>
+                <field name="vendor_type"/>
+                <field name="mitra_outsourcing_id"/>
+                <field name="status_vendor"/>
                 <field name="status_pesanan"/>
                 <field name="total_biaya"/>
             </tree>
@@ -38,7 +41,7 @@
                         <div/>
                     </div>
                     <button name="action_verify" type="object" string="Verifikasi" class="btn btn-primary btn-lg" invisible="status_pesanan != 'draft'"/>
-                    <button name="action_create_penugasan_draft" type="object" string="Buat Penugasan Pengiriman" class="btn btn-success btn-lg" invisible="status_pesanan != 'terverifikasi'"/>
+                    <button name="action_create_penugasan_draft" type="object" string="Buat Penugasan Pengiriman" class="btn btn-success btn-lg" invisible="status_pesanan != 'terverifikasi' or vendor_type != 'internal'"/>
                     <button name="action_complete" type="object" string="Selesaikan" class="btn btn-primary btn-lg" invisible="status_pesanan != 'terverifikasi'"/>
                     <field name="status_pesanan" widget="statusbar" statusbar_visible="draft,terverifikasi,selesai"/>
                 </header>
@@ -53,6 +56,15 @@
                             <field name="alamat_asal"/>
                             <field name="alamat_tujuan"/>
                             <field name="total_biaya" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Vendor Pengiriman">
+                        <group>
+                            <field name="vendor_type"/>
+                            <field name="mitra_outsourcing_id" invisible="vendor_type != 'outsource'" required="vendor_type == 'outsource'"/>
+                        </group>
+                        <group>
+                            <field name="status_vendor" readonly="1"/>
                         </group>
                     </group>
                     <group>

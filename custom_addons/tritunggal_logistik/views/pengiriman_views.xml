@@ -7,7 +7,9 @@
             <tree>
                 <field name="id_pengiriman"/>
                 <field name="pesanan_id"/>
+                <field name="delivery_provider_type"/>
                 <field name="armada_id"/>
+                <field name="mitra_outsourcing_id"/>
                 <field name="tgl_berangkat"/>
                 <field name="estimasi_tiba"/>
                 <field name="status_pengiriman"/>
@@ -47,7 +49,9 @@
                         <group>
                             <field name="id_pengiriman"/>
                             <field name="pesanan_id"/>
-                            <field name="armada_id"/>
+                            <field name="delivery_provider_type"/>
+                            <field name="armada_id" invisible="delivery_provider_type == 'outsource'"/>
+                            <field name="mitra_outsourcing_id" invisible="delivery_provider_type != 'outsource'" required="delivery_provider_type == 'outsource'"/>
                         </group>
                         <group>
                             <field name="tgl_berangkat"/>
@@ -80,13 +84,17 @@
                 <field name="lokasi_terkini"/>
                 <field name="tgl_berangkat"/>
                 <field name="armada_id"/>
+                <field name="mitra_outsourcing_id"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
                             <strong><field name="id_pengiriman"/></strong>
                             <div><field name="status_pengiriman"/></div>
                             <div><field name="lokasi_terkini"/></div>
-                            <div><field name="armada_id"/></div>
+                            <div>
+                                <field name="armada_id"/>
+                                <field name="mitra_outsourcing_id"/>
+                            </div>
                             <div><field name="tgl_berangkat"/></div>
                         </div>
                     </t>

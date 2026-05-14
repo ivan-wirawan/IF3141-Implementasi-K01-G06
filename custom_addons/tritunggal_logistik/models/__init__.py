@@ -1,4 +1,5 @@
 from . import armada
+from . import res_partner
 from . import pesanan
 from . import item_pesanan
 from . import pengiriman

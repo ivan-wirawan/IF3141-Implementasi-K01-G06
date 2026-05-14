@@ -31,6 +31,22 @@
         <field name="groups_id" eval="[(6, 0, [ref('base.group_portal')])]"/>
     </record>
 
+    <record id="partner_tritunggal_outsource" model="res.partner">
+        <field name="name">Vendor Outsource Tritunggal</field>
+        <field name="email">outsource@tritunggal.local</field>
+        <field name="company_type">company</field>
+        <field name="is_tritunggal_outsource_vendor">True</field>
+    </record>
+
+    <record id="user_tritunggal_outsource" model="res.users">
+        <field name="name">Vendor Outsource Tritunggal</field>
+        <field name="login">outsource</field>
+        <field name="password">outsource123</field>
+        <field name="email">outsource@tritunggal.local</field>
+        <field name="partner_id" ref="partner_tritunggal_outsource"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_portal'), ref('tritunggal_logistik.group_tritunggal_outsource')])]"/>
+    </record>
+
     <record id="user_tritunggal_maintenance" model="res.users">
         <field name="name">Maintenance Tritunggal</field>
         <field name="login">maintenance</field>

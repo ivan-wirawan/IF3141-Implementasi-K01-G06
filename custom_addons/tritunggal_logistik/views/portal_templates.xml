@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <template id="portal_my_home_tritunggal_entry" name="Tritunggal Portal Entry" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[contains(@class, 'o_portal_docs')]" position="inside">
+            <t t-if="not request.env.user.has_group('tritunggal_logistik.group_tritunggal_outsource')">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a href="/my/tritunggal" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title mb-2">Tritunggal Logistik</h5>
+                                <p class="card-text text-muted mb-0">Pesanan, invoice, dan tracking pengiriman.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </t>
+            <t t-if="request.env.user.has_group('tritunggal_logistik.group_tritunggal_outsource')">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a href="/my/tritunggal/outsource" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title mb-2">Vendor Outsource</h5>
+                                <p class="card-text text-muted mb-0">Persetujuan pesanan dan update pengiriman vendor.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
     <template id="portal_home_template" name="Tritunggal Customer Portal Home">
         <t t-call="portal.portal_layout">
             <div class="container py-4">
@@ -19,9 +48,12 @@
                     <div class="col-md-4">
                         <a class="btn btn-outline-secondary w-100" href="/my/tritunggal/invoice">Lihat Invoice</a>
                     </div>
+                    <div class="col-md-4">
+                        <a class="btn btn-outline-info w-100" href="/my/tritunggal/tracking">Tracking Pengiriman</a>
+                    </div>
                 </div>
                 <div class="row g-3 mb-4">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="card shadow-sm">
                             <div class="card-body">
                                 <div class="text-uppercase text-muted small">Total Pesanan</div>
@@ -29,11 +61,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="card shadow-sm">
                             <div class="card-body">
                                 <div class="text-uppercase text-muted small">Total Invoice</div>
                                 <div class="display-6"><t t-esc="invoice_count"/></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <div class="text-uppercase text-muted small">Pesanan Dilacak</div>
+                                <div class="display-6"><t t-esc="tracking_count"/></div>
                             </div>
                         </div>
                     </div>
@@ -90,6 +130,46 @@
                         </div>
                     </div>
                 </div>
+                <div class="row g-4 mt-1">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header"><strong>Tracking Pengiriman Terbaru</strong></div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Pesanan</th>
+                                                <th>Status Pengiriman</th>
+                                                <th>Lokasi Terkini</th>
+                                                <th>Update GPS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="tracking_recent" t-as="row">
+                                                <tr>
+                                                    <td><t t-esc="row['pesanan'].id_pesanan"/></td>
+                                                    <td>
+                                                        <t t-if="row['pengiriman']"><t t-esc="row['pengiriman'].status_pengiriman"/></t>
+                                                        <t t-else="">Belum ada pengiriman</t>
+                                                    </td>
+                                                    <td>
+                                                        <t t-if="row['pengiriman']"><t t-esc="row['pengiriman'].lokasi_terkini or '-'"/></t>
+                                                        <t t-else="">-</t>
+                                                    </td>
+                                                    <td>
+                                                        <t t-if="row['pengiriman'] and row['pengiriman'].gps_timestamp"><t t-esc="row['pengiriman'].gps_timestamp"/></t>
+                                                        <t t-else="">-</t>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </t>
     </template>
@@ -109,15 +189,26 @@
                                     <th>ID Pesanan</th>
                                     <th>Tanggal</th>
                                     <th>Status</th>
+                                    <th>Status Pengiriman</th>
+                                    <th>Lokasi Terkini</th>
                                     <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <t t-foreach="pesanan_list" t-as="pesanan">
+                                    <t t-set="tracking" t-value="tracking_by_pesanan.get(pesanan.id)"/>
                                     <tr>
                                         <td><t t-esc="pesanan.id_pesanan"/></td>
                                         <td><t t-esc="pesanan.tgl_pesanan"/></td>
                                         <td><t t-esc="pesanan.status_pesanan"/></td>
+                                        <td>
+                                            <t t-if="tracking and tracking['pengiriman']"><t t-esc="tracking['pengiriman'].status_pengiriman"/></t>
+                                            <t t-else="">Belum ada pengiriman</t>
+                                        </td>
+                                        <td>
+                                            <t t-if="tracking and tracking['pengiriman']"><t t-esc="tracking['pengiriman'].lokasi_terkini or '-'"/></t>
+                                            <t t-else="">-</t>
+                                        </td>
                                         <td><t t-esc="pesanan.total_biaya"/></td>
                                     </tr>
                                 </t>
@@ -157,6 +248,69 @@
                                 </t>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_tracking_template" name="Tritunggal Customer Portal Tracking">
+        <t t-call="portal.portal_layout">
+            <div class="container py-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0">Tracking Pengiriman</h2>
+                    <a class="btn btn-outline-secondary" href="/my/tritunggal">Kembali</a>
+                </div>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table mb-0 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Pesanan</th>
+                                        <th>Penugasan</th>
+                                        <th>Status Penugasan</th>
+                                        <th>Status Pengiriman</th>
+                                        <th>Lokasi Terkini</th>
+                                        <th>Koordinat</th>
+                                        <th>Update GPS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="tracking_rows" t-as="row">
+                                        <tr>
+                                            <td><t t-esc="row['pesanan'].id_pesanan"/></td>
+                                            <td>
+                                                <t t-if="row['penugasan']"><t t-esc="row['penugasan'].id_penugasan"/></t>
+                                                <t t-else="">-</t>
+                                            </td>
+                                            <td>
+                                                <t t-if="row['penugasan']"><t t-esc="row['penugasan'].status_penugasan"/></t>
+                                                <t t-else="">Belum ditugaskan</t>
+                                            </td>
+                                            <td>
+                                                <t t-if="row['pengiriman']"><t t-esc="row['pengiriman'].status_pengiriman"/></t>
+                                                <t t-else="">Belum ada pengiriman</t>
+                                            </td>
+                                            <td>
+                                                <t t-if="row['pengiriman']"><t t-esc="row['pengiriman'].lokasi_terkini or '-'"/></t>
+                                                <t t-else="">-</t>
+                                            </td>
+                                            <td>
+                                                <t t-if="row['pengiriman'] and (row['pengiriman'].gps_lat or row['pengiriman'].gps_lng)">
+                                                    <t t-esc="row['pengiriman'].gps_lat"/>, <t t-esc="row['pengiriman'].gps_lng"/>
+                                                </t>
+                                                <t t-else="">-</t>
+                                            </td>
+                                            <td>
+                                                <t t-if="row['pengiriman'] and row['pengiriman'].gps_timestamp"><t t-esc="row['pengiriman'].gps_timestamp"/></t>
+                                                <t t-else="">-</t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -222,6 +376,327 @@
                         <a class="btn btn-outline-secondary" href="/my/tritunggal/pesanan">Batal</a>
                     </div>
                 </form>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_outsource_home_template" name="Tritunggal Outsource Portal Home">
+        <t t-call="portal.portal_layout">
+            <div class="container py-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h2 class="mb-1">Portal Vendor Outsource</h2>
+                        <p class="text-muted mb-0"><t t-esc="partner.name"/></p>
+                    </div>
+                    <a class="btn btn-outline-secondary" href="/my/home">Portal Home</a>
+                </div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <a class="btn btn-primary w-100" href="/my/tritunggal/outsource/orders">Pesanan Vendor</a>
+                    </div>
+                    <div class="col-md-6">
+                        <a class="btn btn-outline-primary w-100" href="/my/tritunggal/outsource/shipments">Pengiriman Vendor</a>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header"><strong>Pesanan Terbaru</strong></div>
+                            <div class="card-body p-0">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Pesanan</th>
+                                            <th>Status Pesanan</th>
+                                            <th>Status Vendor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="order_recent" t-as="pesanan">
+                                            <tr>
+                                                <td><t t-esc="pesanan.id_pesanan"/></td>
+                                                <td><t t-esc="pesanan.status_pesanan"/></td>
+                                                <td><t t-esc="pesanan.status_vendor"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header"><strong>Pengiriman Terbaru</strong></div>
+                            <div class="card-body p-0">
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Pengiriman</th>
+                                            <th>Status</th>
+                                            <th>Lokasi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="shipment_recent" t-as="pengiriman">
+                                            <tr>
+                                                <td><t t-esc="pengiriman.id_pengiriman"/></td>
+                                                <td><t t-esc="pengiriman.status_pengiriman"/></td>
+                                                <td><t t-esc="pengiriman.lokasi_terkini or '-'"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_outsource_order_list_template" name="Tritunggal Outsource Order List">
+        <t t-call="portal.portal_layout">
+            <div class="container py-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0">Pesanan Vendor</h2>
+                    <a class="btn btn-outline-secondary" href="/my/tritunggal/outsource">Kembali</a>
+                </div>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table mb-0 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Pesanan</th>
+                                        <th>Tanggal</th>
+                                        <th>Alamat Asal</th>
+                                        <th>Alamat Tujuan</th>
+                                        <th>Status Vendor</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="order_list" t-as="pesanan">
+                                        <tr>
+                                            <td><t t-esc="pesanan.id_pesanan"/></td>
+                                            <td><t t-esc="pesanan.tgl_pesanan"/></td>
+                                            <td><t t-esc="pesanan.alamat_asal"/></td>
+                                            <td><t t-esc="pesanan.alamat_tujuan"/></td>
+                                            <td><t t-esc="pesanan.status_vendor"/></td>
+                                            <td>
+                                                <a t-att-href="'/my/tritunggal/outsource/orders/%s' % pesanan.id" class="btn btn-sm btn-outline-secondary">Detail</a>
+                                                <t t-if="pesanan.status_pesanan == 'terverifikasi' and pesanan.status_vendor == 'waiting_acceptance'">
+                                                    <form t-att-action="'/my/tritunggal/outsource/orders/%s/accept' % pesanan.id" method="post" class="d-inline">
+                                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                        <button type="submit" class="btn btn-sm btn-primary">Terima</button>
+                                                    </form>
+                                                    <form t-att-action="'/my/tritunggal/outsource/orders/%s/reject' % pesanan.id" method="post" class="d-inline">
+                                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">Tolak</button>
+                                                    </form>
+                                                </t>
+                                                <t t-else="">-</t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_outsource_order_detail_template" name="Tritunggal Outsource Order Detail">
+        <t t-call="portal.portal_layout">
+            <div class="container py-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0">Detail Pesanan <t t-esc="pesanan.id_pesanan"/></h2>
+                    <a class="btn btn-outline-secondary" href="/my/tritunggal/outsource/orders">Kembali</a>
+                </div>
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-6">
+                        <div class="card h-100">
+                            <div class="card-header"><strong>Informasi Pesanan</strong></div>
+                            <div class="card-body">
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-4">Customer</dt>
+                                    <dd class="col-sm-8"><t t-esc="pesanan.partner_id.name or '-'"/></dd>
+                                    <dt class="col-sm-4">Tanggal</dt>
+                                    <dd class="col-sm-8"><t t-esc="pesanan.tgl_pesanan"/></dd>
+                                    <dt class="col-sm-4">Status Pesanan</dt>
+                                    <dd class="col-sm-8"><t t-esc="pesanan.status_pesanan"/></dd>
+                                    <dt class="col-sm-4">Status Vendor</dt>
+                                    <dd class="col-sm-8"><t t-esc="pesanan.status_vendor"/></dd>
+                                    <dt class="col-sm-4">Total</dt>
+                                    <dd class="col-sm-8"><t t-esc="pesanan.total_biaya"/></dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card h-100">
+                            <div class="card-header"><strong>Rute</strong></div>
+                            <div class="card-body">
+                                <dl class="row mb-0">
+                                    <dt class="col-sm-4">Alamat Asal</dt>
+                                    <dd class="col-sm-8"><t t-esc="pesanan.alamat_asal"/></dd>
+                                    <dt class="col-sm-4">Alamat Tujuan</dt>
+                                    <dd class="col-sm-8"><t t-esc="pesanan.alamat_tujuan"/></dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header"><strong>Item Pesanan</strong></div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table mb-0 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>ID Item</th>
+                                        <th>Jumlah</th>
+                                        <th>Volume</th>
+                                        <th>Berat</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="pesanan.item_ids" t-as="item">
+                                        <tr>
+                                            <td><t t-esc="item.id_item"/></td>
+                                            <td><t t-esc="item.jumlah_barang"/></td>
+                                            <td><t t-esc="item.volume_barang"/></td>
+                                            <td><t t-esc="item.berat_barang"/></td>
+                                            <td><t t-esc="item.subtotal_harga"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="4" class="text-end">Total</th>
+                                        <th><t t-esc="pesanan.total_biaya"/></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header"><strong>Pengiriman Terkait</strong></div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table mb-0 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Pengiriman</th>
+                                        <th>Status</th>
+                                        <th>Lokasi</th>
+                                        <th>Update GPS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="shipment_list" t-as="pengiriman">
+                                        <tr>
+                                            <td><t t-esc="pengiriman.id_pengiriman"/></td>
+                                            <td><t t-esc="pengiriman.status_pengiriman"/></td>
+                                            <td><t t-esc="pengiriman.lokasi_terkini or '-'"/></td>
+                                            <td>
+                                                <t t-if="pengiriman.gps_timestamp"><t t-esc="pengiriman.gps_timestamp"/></t>
+                                                <t t-else="">-</t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="not shipment_list">
+                                        <tr>
+                                            <td colspan="4" class="text-muted">Belum ada pengiriman.</td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <t t-if="pesanan.status_pesanan == 'terverifikasi' and pesanan.status_vendor == 'waiting_acceptance'">
+                    <div class="d-flex gap-2">
+                        <form t-att-action="'/my/tritunggal/outsource/orders/%s/accept' % pesanan.id" method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <button type="submit" class="btn btn-primary">Terima Pesanan</button>
+                        </form>
+                        <form t-att-action="'/my/tritunggal/outsource/orders/%s/reject' % pesanan.id" method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <button type="submit" class="btn btn-outline-danger">Tolak Pesanan</button>
+                        </form>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_outsource_shipment_list_template" name="Tritunggal Outsource Shipment List">
+        <t t-call="portal.portal_layout">
+            <div class="container py-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0">Pengiriman Vendor</h2>
+                    <a class="btn btn-outline-secondary" href="/my/tritunggal/outsource">Kembali</a>
+                </div>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table mb-0 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Pengiriman</th>
+                                        <th>Pesanan</th>
+                                        <th>Status</th>
+                                        <th>Lokasi</th>
+                                        <th>GPS</th>
+                                        <th>Update</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="shipment_list" t-as="pengiriman">
+                                        <tr>
+                                            <td><t t-esc="pengiriman.id_pengiriman"/></td>
+                                            <td><t t-esc="pengiriman.pesanan_id.id_pesanan"/></td>
+                                            <td><t t-esc="pengiriman.status_pengiriman"/></td>
+                                            <td><t t-esc="pengiriman.lokasi_terkini or '-'"/></td>
+                                            <td>
+                                                <t t-if="pengiriman.gps_lat or pengiriman.gps_lng">
+                                                    <t t-esc="pengiriman.gps_lat"/>, <t t-esc="pengiriman.gps_lng"/>
+                                                </t>
+                                                <t t-else="">-</t>
+                                            </td>
+                                            <td>
+                                                <form t-att-action="'/my/tritunggal/outsource/shipments/%s/update' % pengiriman.id" method="post" class="d-flex flex-column gap-2">
+                                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                    <select name="status_pengiriman" class="form-select form-select-sm">
+                                                        <option value="draft" t-att-selected="pengiriman.status_pengiriman == 'draft'">Draft</option>
+                                                        <option value="berangkat" t-att-selected="pengiriman.status_pengiriman == 'berangkat'">Berangkat</option>
+                                                        <option value="dalam_perjalanan" t-att-selected="pengiriman.status_pengiriman == 'dalam_perjalanan'">Dalam Perjalanan</option>
+                                                        <option value="tiba" t-att-selected="pengiriman.status_pengiriman == 'tiba'">Tiba</option>
+                                                        <option value="terkendala" t-att-selected="pengiriman.status_pengiriman == 'terkendala'">Terkendala</option>
+                                                    </select>
+                                                    <input type="text" name="lokasi_terkini" class="form-control form-control-sm" placeholder="Lokasi terkini" t-att-value="pengiriman.lokasi_terkini or ''"/>
+                                                    <div class="d-flex gap-2">
+                                                        <input type="number" step="0.000001" name="gps_lat" class="form-control form-control-sm" placeholder="Lat"/>
+                                                        <input type="number" step="0.000001" name="gps_lng" class="form-control form-control-sm" placeholder="Lng"/>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </t>
     </template>

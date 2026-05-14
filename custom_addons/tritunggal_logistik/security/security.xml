@@ -31,6 +31,11 @@
         <field name="category_id" ref="module_category_tritunggal_logistik"/>
     </record>
 
+    <record id="group_tritunggal_outsource" model="res.groups">
+        <field name="name">Tritunggal Outsource Vendor</field>
+        <field name="category_id" ref="module_category_tritunggal_logistik"/>
+    </record>
+
     <!-- Domain Rules untuk Supir: hanya lihat penugasan mereka sendiri -->
     <record id="ir_rule_penugasan_supir_own" model="ir.rule">
         <field name="name">Penugasan Pengiriman - Supir melihat penugasan sendiri</field>
