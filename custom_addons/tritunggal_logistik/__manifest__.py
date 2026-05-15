@@ -8,7 +8,6 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'data/sequences.xml',
-        'data/users.xml',
         'report/invoice_report.xml',
         'views/pesanan_views.xml',
         'views/item_pesanan_views.xml',
@@ -22,6 +21,7 @@
         'views/menu_views.xml',
         'views/portal_templates.xml',
         'views/website_branding.xml',
+        'data/users.xml',
     ],
     'demo': [
         'demo/demo.xml',
