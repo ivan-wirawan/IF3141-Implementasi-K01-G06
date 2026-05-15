@@ -673,7 +673,7 @@
                                                 <t t-else="">-</t>
                                             </td>
                                             <td>
-                                                <form t-att-action="'/my/tritunggal/outsource/shipments/%s/update' % pengiriman.id" method="post" class="d-flex flex-column gap-2">
+                                                <form t-att-action="'/my/tritunggal/outsource/shipments/%s/update' % pengiriman.id" method="post" enctype="multipart/form-data" class="d-flex flex-column gap-2">
                                                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                                                     <select name="status_pengiriman" class="form-select form-select-sm">
                                                         <option value="draft" t-att-selected="pengiriman.status_pengiriman == 'draft'">Draft</option>
@@ -687,6 +687,7 @@
                                                         <input type="number" step="0.000001" name="gps_lat" class="form-control form-control-sm" placeholder="Lat"/>
                                                         <input type="number" step="0.000001" name="gps_lng" class="form-control form-control-sm" placeholder="Lng"/>
                                                     </div>
+                                                    <input type="file" name="bukti_foto" accept="image/*" class="form-control form-control-sm"/>
                                                     <button type="submit" class="btn btn-sm btn-primary">Update</button>
                                                 </form>
                                             </td>

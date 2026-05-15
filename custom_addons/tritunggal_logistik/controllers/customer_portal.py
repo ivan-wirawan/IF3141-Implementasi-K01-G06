@@ -1,3 +1,5 @@
+import base64
+
 from odoo import fields, http
 from odoo.exceptions import AccessError
 from odoo.http import request
@@ -255,6 +257,10 @@ class TritunggalCustomerPortal(http.Controller):
                 values['gps_timestamp'] = fields.Datetime.now()
             except ValueError:
                 pass
+
+        bukti_foto = request.httprequest.files.get('bukti_foto')
+        if bukti_foto and bukti_foto.filename:
+            values['bukti_foto'] = base64.b64encode(bukti_foto.read())
 
         if values:
             pengiriman.write(values)
